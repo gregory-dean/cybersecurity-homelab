@@ -37,7 +37,7 @@ See [docs/roadmap.md](docs/roadmap.md) for the full phase checklist.
 
 This lab is built on a Windows 11 host using Oracle VirtualBox.
 
-![Cybersecurity Homelab Network Diagram](docs/images/homelab-diagram.png)
+![Cybersecurity Homelab Network Diagram](docs/images/homelab-diagram-v2.png)
 
 ### Internal Lab Network
 

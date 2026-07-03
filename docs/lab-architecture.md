@@ -4,7 +4,7 @@
 
 This homelab is designed to simulate a small enterprise security environment using VirtualBox on a Windows 11 host.
 
-![Cybersecurity Homelab Network Diagram](images/homelab-diagram.png)
+![Cybersecurity Homelab Network Diagram](images/homelab-diagram-v2.png)
 
 ## System Roles
 
