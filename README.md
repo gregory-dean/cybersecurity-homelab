@@ -1,14 +1,52 @@
-# Cybersecurity Homelab
+# Homelab
 
-This repository documents the design, build process, and security experiments performed in my personal cybersecurity homelab.
+This repository documents my homelab in two tracks:
 
-The goal of this project is to build a controlled enterprise-style lab for practicing system administration, networking, detection engineering, vulnerability management, and attack simulation while documenting each phase in a structured and public-facing way.
+1. **Physical infrastructure** — as-built ops runbooks for the rack (modem → OPNsense → switch → Proxmox → services)
+2. **Cybersecurity lab** — VirtualBox-based enterprise-style security practice (AD, SIEM, attack simulation)
 
-The lab is continuously evolving as I expand the infrastructure and add new security tools and testing scenarios.
+The physical track is the source of truth for live hardware and network state. The VirtualBox projects remain as a learning / portfolio journal and may later migrate onto Proxmox (see [homelab/12-security-lab.md](homelab/12-security-lab.md)).
 
 ---
 
-## Current Status
+## Physical infrastructure (start here)
+
+Work through [homelab/README.md](homelab/README.md) in numeric order. Each document has a "Done when" checklist.
+
+| # | Document | What it covers |
+|---|----------|----------------|
+| 00 | [Inventory](homelab/00-inventory.md) | Devices, specs, roles, power notes |
+| 01 | [Physical topology](homelab/01-physical-topology.md) | Modem → firewall → switch → devices |
+| 02 | [IP addressing](homelab/02-ip-addressing.md) | Subnets, statics, DHCP, DNS names |
+| 03 | [Cabling and patching](homelab/03-cabling-and-patching.md) | Switch / panel map, labeling |
+| 04 | [OPNsense baseline](homelab/04-opnsense-baseline.md) | WAN/LAN, DHCP, DNS, hardening |
+| 05 | [Access point](homelab/05-access-point.md) | Archer AX6000 in true AP mode |
+| 06 | [Proxmox baseline](homelab/06-proxmox-baseline.md) | Static IP, updates, SSH, storage |
+| 07 | [Core services](homelab/07-core-services.md) | Pi-hole, Docker LXC, NPM, Vaultwarden, … |
+| 08 | [Remote access](homelab/08-remote-access.md) | Tailscale; Cloudflare Tunnel later |
+| 09 | [Backups](homelab/09-backups.md) | Proxmox backups, config exports, 3-2-1 |
+| 10 | [VLANs and segmentation](homelab/10-vlans-and-segmentation.md) | Managed-switch upgrade path |
+| 11 | [Storage / NAS](homelab/11-storage-nas.md) | TrueNAS phase (deferred) |
+| 12 | [Security lab](homelab/12-security-lab.md) | Kali, DVWA, isolation rules |
+| 13 | [Hardening and operations](homelab/13-hardening-and-ops.md) | Ongoing maintenance cadence |
+| — | [CHANGELOG](homelab/CHANGELOG.md) | Dated IP / port / config changes |
+
+### Current physical status (as-built, 2026-08)
+
+| Item | State |
+|------|-------|
+| Internet edge | Netgear CM2000 → OPNsense WAN (`igb1`) — working, WAN config unverified |
+| Firewall | Lenovo M720q / OPNsense, LAN `192.168.10.1/24` |
+| Switch | TP-Link LS108GP (unmanaged PoE+) |
+| Wi-Fi | TP-Link Archer AX6000 — AP mode unverified |
+| Compute | Lenovo M715q — Proxmox installed, largely unconfigured |
+| Services | None deployed yet |
+
+---
+
+## Cybersecurity lab (VirtualBox journal)
+
+Earlier phases run on a Windows 11 host with Oracle VirtualBox (`192.168.56.0/24` host-only).
 
 | Phase | Project | Status |
 |-------|---------|--------|
@@ -19,64 +57,22 @@ The lab is continuously evolving as I expand the infrastructure and add new secu
 | 5 | [Attack Simulation and Detection](projects/05-attack-simulation-and-detection/) | Planned |
 | 6 | [Linux Hardening and Monitoring](projects/06-linux-hardening-and-monitoring/) | Planned |
 
-See [docs/roadmap.md](docs/roadmap.md) for the full phase checklist.
-
----
-
-## Objectives
-
-- Build a realistic enterprise-style security lab
-- Practice both offensive and defensive security concepts
-- Simulate attack activity in a controlled environment
-- Generate and analyze logs across Windows and Linux systems
-- Document the full build process for learning and portfolio development
-
----
-
-## Lab Architecture
-
-This lab is built on a Windows 11 host using Oracle VirtualBox.
-
 ![Cybersecurity Homelab Network Diagram](docs/images/homelab-diagram.png)
 
-### Internal Lab Network
-
-- Subnet: `192.168.56.0/24`
-- VirtualBox NAT used for outbound internet access
-- VirtualBox Host-Only Adapter used for internal lab communication
-
-See [docs/lab-architecture.md](docs/lab-architecture.md) for system roles and design goals.  
-See [docs/asset-inventory.md](docs/asset-inventory.md) for the full asset table and IP addressing plan.
+See [docs/README.md](docs/README.md) for the virtual-lab documentation index, [docs/roadmap.md](docs/roadmap.md) for the phase checklist, and [docs/asset-inventory.md](docs/asset-inventory.md) for VirtualBox IPs.
 
 ---
 
-## Tools and Technologies
+## Repository layout
 
-### Platforms and Operating Systems
-- Windows 11
-- Windows Server 2022
-- Ubuntu Server
-- Kali Linux
+```
+homelab/     → physical ops runbooks (source of truth for live gear)
+docs/        → VirtualBox lab reference docs + diagram
+projects/    → VirtualBox phase journals (README + notes + images)
+```
 
-### Infrastructure
-- Oracle VirtualBox
-- Host-only networking
-- NAT networking
-- Active Directory Domain Services
-- Group Policy
-- DNS
+## Conventions
 
-### Security Tooling
-- Wazuh
-- Sysmon
-- Nmap
-- Wireshark
-- Nessus or OpenVAS
-- Metasploit
-- Burp Suite
-
----
-
-## Documentation
-
-See [docs/README.md](docs/README.md) for the full documentation index.
+- **Physical changes:** Log every IP, port, VLAN, or config change in [homelab/CHANGELOG.md](homelab/CHANGELOG.md) before or right after the change.
+- **Screenshots:** Store under `projects/NN-<name>/images/` for VirtualBox phases.
+- **Credentials:** Never commit passwords, API keys, or screenshots that show secrets.
