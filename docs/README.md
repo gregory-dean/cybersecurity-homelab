@@ -1,6 +1,8 @@
 # Documentation Index
 
-Central reference for the cybersecurity homelab repository.
+Central reference for the **VirtualBox cybersecurity lab** track.
+
+For live rack hardware, networking, Proxmox, and services, start at [../homelab/README.md](../homelab/README.md).
 
 ## Reference Docs
 
