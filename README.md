@@ -1,82 +1,52 @@
-# Cybersecurity Homelab
+# Homelab
 
-This repository documents the design, build process, and security experiments performed in my personal cybersecurity homelab.
+I run a 10 inch rack on the desk. OPNsense sits at the edge. Two Proxmox nodes hold the guests. This Windows desktop is the command center.
 
-The goal of this project is to build a controlled enterprise-style lab for practicing system administration, networking, detection engineering, vulnerability management, and attack simulation while documenting each phase in a structured and public-facing way.
+I use it for security work and for things I want to host myself.
 
-The lab is continuously evolving as I expand the infrastructure and add new security tools and testing scenarios.
+![Network](images/diagrams/network.jpg)
 
----
+![Front](images/rack/01-rack-front.jpg)
 
-## Current Status
+The switch in this cabinet cannot do VLANs. Isolation is a VXLAN overlay between the two Proxmox nodes, plus a second OPNsense install that only routes the lab. Sirius never sees traffic between two devices on the same switch. That is why both firewalls exist.
 
-| Phase | Project | Status |
-|-------|---------|--------|
-| 1 | [Lab Foundation and Networking](projects/01-lab-foundation-and-networking/) | Complete |
-| 2 | [AD Identity and Access](projects/02-ad-identity-and-access/) | Complete |
-| 3 | [Log Collection and SIEM Onboarding](projects/03-log-collection-and-siem-onboarding/) | In progress |
-| 4 | [Vulnerability Management Workflow](projects/04-vulnerability-management-workflow/) | Planned |
-| 5 | [Attack Simulation and Detection](projects/05-attack-simulation-and-detection/) | Planned |
-| 6 | [Linux Hardening and Monitoring](projects/06-linux-hardening-and-monitoring/) | Planned |
+## Hosts
 
-See [docs/roadmap.md](docs/roadmap.md) for the full phase checklist.
+| Name | Device | Role | Address |
+| ---- | ------ | ---- | ------- |
+| Sirius | M720q i5-8400T | OPNsense, physical edge | `10.10.10.1` |
+| Polaris | M720q i5-9500T | Proxmox, primary | `10.10.10.11` |
+| Vega | M715q Ryzen 3 PRO 2200GE | Proxmox, secondary | `10.10.10.12` |
+| Sol | Ryzen 7 5800X desktop | Command center | `10.10.10.154` |
+| Lyra | Archer AX6000 | Access point | `10.10.10.2` |
+| gw-01 | VM on Polaris | OPNsense, lab router | `10.10.10.3` |
+| dc-01 | VM on Polaris | AD DS | `10.30.10.10` |
+| winclient-01 | VM on Polaris | Windows 11 Pro, domain joined | `10.30.20.20` |
+| siem-01 | VM on Polaris | Wazuh | `10.30.10.50` |
+| ubuntu-01 | VM on Vega | Ubuntu Server, off domain | `10.30.10.40` |
+| kali-01 | VM on Vega | Kali, off domain | `10.30.30.30` |
 
----
+Star names stay on the metal. Role names stay on the guests.
 
-## Objectives
+## Docs
 
-- Build a realistic enterprise-style security lab
-- Practice both offensive and defensive security concepts
-- Simulate attack activity in a controlled environment
-- Generate and analyze logs across Windows and Linux systems
-- Document the full build process for learning and portfolio development
+Reference. Addresses, hardware, and what is actually running.
 
----
+- [Architecture](docs/architecture.md)
+- [Hardware](docs/hardware.md)
+- [Network](docs/network.md)
+- [Inventory](docs/inventory.md)
 
-## Lab Architecture
+## Guides
 
-This lab is built on a Windows 11 host using Oracle VirtualBox.
+How I built each piece. Written so you can repeat it.
 
-![Cybersecurity Homelab Network Diagram](docs/images/homelab-diagram.png)
+- [Rack](guides/rack.md)
+- [Firewall](guides/firewall.md)
+- [Hypervisor](guides/hypervisor.md)
+- [Switching](guides/switching.md)
+- [Access point](guides/access-point.md)
+- [Command center](guides/command-center.md)
+- [Lab guests](guides/lab-guests.md)
 
-### Internal Lab Network
-
-- Subnet: `192.168.56.0/24`
-- VirtualBox NAT used for outbound internet access
-- VirtualBox Host-Only Adapter used for internal lab communication
-
-See [docs/lab-architecture.md](docs/lab-architecture.md) for system roles and design goals.  
-See [docs/asset-inventory.md](docs/asset-inventory.md) for the full asset table and IP addressing plan.
-
----
-
-## Tools and Technologies
-
-### Platforms and Operating Systems
-- Windows 11
-- Windows Server 2022
-- Ubuntu Server
-- Kali Linux
-
-### Infrastructure
-- Oracle VirtualBox
-- Host-only networking
-- NAT networking
-- Active Directory Domain Services
-- Group Policy
-- DNS
-
-### Security Tooling
-- Wazuh
-- Sysmon
-- Nmap
-- Wireshark
-- Nessus or OpenVAS
-- Metasploit
-- Burp Suite
-
----
-
-## Documentation
-
-See [docs/README.md](docs/README.md) for the full documentation index.
+Editable diagrams live in [`images/diagrams/architecture.drawio`](images/diagrams/architecture.drawio). Open that file in [diagrams.net](https://app.diagrams.net). The Traffic page is the wall-and-gate view of how packets move.
